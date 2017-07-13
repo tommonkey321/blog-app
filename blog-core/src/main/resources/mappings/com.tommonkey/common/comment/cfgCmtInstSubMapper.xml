@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tommonkey.common.comment.dao.ICfgCmtInstSubDao">
+    <resultMap id="cmtCountMap" type="java.util.HashMap">
+        <result column="itemId"  property="itemId" />
+        <result column="count"  property="count" />
+    </resultMap>
+
+    <select id="getSubCmtItemCount" parameterType="com.tommonkey.common.comment.entity.CfgCmtInstSubEntity" resultMap="cmtCountMap">
+        select item_id itemId,count(1) count
+        from $$cfg_cmt_inst_sub$$
+        where cmt_inst_id = #{cmtInstId}
+        and sub_cmt_target_id = #{subCmtTargetId}
+        <if test="itemId != null and itemId >0 ">
+            and item_id = #{itemId}
+        </if>
+        group by item_id
+    </select>
+
+</mapper>
