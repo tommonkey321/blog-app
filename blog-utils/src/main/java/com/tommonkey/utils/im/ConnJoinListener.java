@@ -24,8 +24,9 @@ public class ConnJoinListener extends ConnectListener {
                 UserInfoInterface userInfoInterface = SessionManager.getUser(sessionId);
                 if(userInfoInterface != null){
 //                    if(userInfoInterface.getConnId() == null){
-                        SessionManager.inLinePop("");
+//                        SessionManager.inLinePop("");
 //                    }
+                    System.out.println("连接L:"+conn.getId());
                     userInfoInterface.setConnId(conn.getId());
                     SessionManager.setUser(userInfoInterface);
                 }
