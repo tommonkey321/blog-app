@@ -44,6 +44,9 @@ public class outLineThread implements Runnable {
                         if(connStr != null){
                             CometConnection conn = engine.getConnection(connStr);
                             engine.sendTo(Constants.Sys.CHANNEL,conn ,connStr+"_"+Constants.Sys.SYS_EXIT);
+                            System.out.println("发送了消息");
+                        }else{
+                            System.out.println("这个竟然未null？");
                         }
                     }catch (Exception e){
 
