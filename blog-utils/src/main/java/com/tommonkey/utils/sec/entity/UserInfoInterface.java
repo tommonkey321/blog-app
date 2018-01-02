@@ -20,6 +20,15 @@ public class UserInfoInterface implements Serializable {
     private Date loginDate;//登陆时间
     private Date lastBusiDate;//最后业务操作时间
     private String connId;//连接id
+    private boolean isAdmin;
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean getIsAdmin() {
+        return true;
+    }
 
     public void setConnId(String connId) {
         this.connId = connId;
