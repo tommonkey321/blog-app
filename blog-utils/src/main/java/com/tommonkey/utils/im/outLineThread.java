@@ -26,6 +26,7 @@ public class outLineThread implements Runnable {
             }
             CometEngine engine = CometContext.getInstance().getEngine();
             //如果存在下线用户
+            System.out.println("---------------------判断存在是否下线的用户");
             if(i>30 && JedisUtils.exists(Constants.Sys.OUT_LINE_CONN)){
                 i=31;
                 List<String> connList = JedisUtils.getList(Constants.Sys.OUT_LINE_CONN);

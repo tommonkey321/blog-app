@@ -28,6 +28,7 @@ public class SendMsgThread implements Runnable {
             }
             CometEngine engine = CometContext.getInstance().getEngine();
             //如果存在待发送的消息
+            System.out.println("***********************准备判断是否存在消息");
             if(i>30 && JedisUtils.exists(Constants.Sys.MSG_LIST)){
                 i=31;
                 List msgList = null;
