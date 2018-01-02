@@ -1,15 +1,19 @@
 package com.tommonkey.utils.im;
 
+import com.tommonkey.blog.api.msg.IMessageServiceFSV;
 import com.tommonkey.utils.sec.SessionManager;
 import com.tommonkey.utils.sec.entity.UserInfoInterface;
 import org.comet4j.core.CometConnection;
 import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by hyf on 2017/7/8.
  */
 public class ConnJoinListener extends ConnectListener {
+    @Autowired
+    private IMessageServiceFSV imsg;
     @Override
     public boolean handleEvent(ConnectEvent connectEvent) {
         CometConnection conn = connectEvent.getConn();
@@ -19,9 +23,13 @@ public class ConnJoinListener extends ConnectListener {
             if(sessionId != null){
                 UserInfoInterface userInfoInterface = SessionManager.getUser(sessionId);
                 if(userInfoInterface != null){
+//                    if(userInfoInterface.getConnId() == null){
+                        SessionManager.inLinePop("");
+//                    }
                     userInfoInterface.setConnId(conn.getId());
                     SessionManager.setUser(userInfoInterface);
                 }
+
             }
         } catch (Exception e) {
 

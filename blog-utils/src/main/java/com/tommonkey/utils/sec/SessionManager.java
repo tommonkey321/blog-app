@@ -4,12 +4,11 @@ import com.alibaba.dubbo.rpc.RpcContext;
 import com.tommonkey.utils.bp.Constants;
 import com.tommonkey.utils.common.JedisUtils;
 import com.tommonkey.utils.config.Global;
+import com.tommonkey.utils.response.Response;
+import com.tommonkey.utils.sec.entity.MessageInterface;
 import com.tommonkey.utils.sec.entity.UserInfoInterface;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 已登录用户
@@ -88,6 +87,23 @@ public class SessionManager {
         return listUser;
     }
 
+    /**
+     * 获取在线的管理员
+     * @return
+     * @throws Exception
+     */
+    public static List<UserInfoInterface> getInLineAdmin() throws Exception{
+        List<UserInfoInterface> listAdmin = new ArrayList<>();;
+        List<UserInfoInterface> listUser = getInLine();
+        for (int i = 0; listUser != null && i < listUser.size(); i++) {
+            if(listUser.get(i).getIsAdmin()){
+                listAdmin.add(listUser.get(i));
+            }
+        }
+        return listAdmin;
+    }
+
+
 
     /**
      *  根据sessionId剔除用户
@@ -138,6 +154,38 @@ public class SessionManager {
                 }
             }
         });
+    }
+
+    public static String inLinePop(String param){
+        Response response = new Response();
+        try {
+            List<UserInfoInterface> adminList =  SessionManager.getInLineAdmin();
+            //给在线管理员发送通知
+            UserInfoInterface userInfoInterface = SessionManager.getUser();
+            for (int i = 0; i <adminList.size(); i++) {
+                MessageInterface msgInterface = new MessageInterface();
+                UserInfoInterface user =  adminList.get(i);
+                msgInterface.setSendUser(userInfoInterface);
+                msgInterface.setReceiveUser(user);
+                msgInterface.setSendDate(new Date());
+                msgInterface.setEffTime(60*60*24);//暂定24小时
+                msgInterface.setMsgType(1);
+                msgInterface.setSendType(3);
+                msgInterface.setMsgState(0);
+                msgInterface.setMsgTitle("登陆提醒&"+user.getConnId());
+                msgInterface.setMsgContent(userInfoInterface.getUserName()+"上线了!");
+                msgInterface.setMsgShowTime(10);
+                msgInterface.setMsgShowType("0");
+                msgInterface.setShowPosition("down");
+                //将消息放入队列
+                JedisUtils.listObjectAdd(Constants.Sys.MSG_LIST,msgInterface,0);
+            }
+            response.setCode(Response.SUCCESS);
+        }catch (Exception e){
+            response.setCode(Response.ERROR);
+            response.setMessage(e.getMessage());
+        }
+        return response.toString();
     }
 
 

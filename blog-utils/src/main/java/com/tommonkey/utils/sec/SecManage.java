@@ -150,4 +150,5 @@ public class SecManage {
     public static List<com.tommonkey.utils.sec.entity.Organize> getOrganizeByParentOrgId(Long parentOrgId){
         return (List<com.tommonkey.utils.sec.entity.Organize>) com.tommonkey.utils.common.JedisUtils.getObject(OPER_CACHE_NAME + "_" + ORGANIZE_ORGANIZES + parentOrgId);
     }
+
 }
