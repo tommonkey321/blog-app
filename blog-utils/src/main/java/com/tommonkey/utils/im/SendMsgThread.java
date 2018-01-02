@@ -28,7 +28,6 @@ public class SendMsgThread implements Runnable {
             }
             CometEngine engine = CometContext.getInstance().getEngine();
             //如果存在待发送的消息
-            System.out.println("***********************准备判断是否存在消息");
             if(i>30 && JedisUtils.exists(Constants.Sys.MSG_LIST)){
                 i=31;
                 List msgList = null;
@@ -68,10 +67,11 @@ public class SendMsgThread implements Runnable {
                             msgInter.setSendUser(null);
                             msgInter.setReceiveUser(null);
                             resultJson = com.tommonkey.utils.common.JsonUtil.object2Json(msgInter);
+                            System.out.println(resultJson);
                             engine.sendTo(Constants.Sys.CHANNEL,conn ,resultJson);
                         }
                     }catch (Exception e){
-
+                        e.printStackTrace();
                     }
 
                 }
